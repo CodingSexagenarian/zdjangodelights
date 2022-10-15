@@ -1,0 +1,9 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block content %}
+    <h2>Delete Recipe Requirement</h2>
+        <form method="post">
+          <p>Confirm that you want to delete "{{ object }}"?</p>
+          <input type="submit" value="Confirm" />
+        </form>
+{% endblock %}
