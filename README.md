@@ -1,2 +1,2 @@
 # djangodelights
-Codecademy Capstone Django Development Project
+Codecademy Build Python Web Apps with Django Capstone Project
