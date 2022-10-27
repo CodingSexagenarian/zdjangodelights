@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
 {% load static %} 
-{% block title %}Django Delights{% endblock %}
+{% block title %}Inventory Tracker{% endblock %}
 {% block head %}
 {% endblock %}
 {% block content %}
     <h2>Ingredients</h2>
-    <!-- <a href="{% url 'add_ingredient' %} ">Add New Ingredient to
-    Inventory</a> -->
     <hr/>
     <table class="inventory-table">
         <thead>
@@ -27,10 +25,15 @@
                 <td>{{ ingredient.quantity }}</td>
                 <td>{{ ingredient.unit }}</td>
                 <td class="price">${{ ingredient.price_per_unit|stringformat:".2f" }}</td>
-                <td><a href="{% url "delete" ingredient.id %}"
+                <td><a href="{% url "delete_ingredient" ingredient.id %}"
                        style="text-decoration: none; color: inherit;">❌</a></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    <center>
+        <a href="{% url "add_ingredient" %}" style="display:
+     inherit; text-align: center; border-radius: 15px; text-decoration: none;
+     color: inherit; padding: 4px; background-color: lightblue;">➕</a>
+    </center>
 {% endblock %}

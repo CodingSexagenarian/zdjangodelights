@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <!--This is the meta information which is good for SEO-->
+    {% block head-meta %}
+        <meta charset="UTF-8">
+        <meta name="keywords" content="Inventory Tracker Manages Your
+        Kitchen's Inventory Needs">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Add Recipe Requirement for a Menu Item</title>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+        <h2>Add Recipe Requirement for a Menu Item</h2>
+        <form method="post">
+            <div>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Submit"/>
+            </div>
+        </form>
+    {% endblock %}
+</body>
+</html>
+
+
+
+

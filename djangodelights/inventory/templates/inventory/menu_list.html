@@ -1,10 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
+<html>
+    <body>
+    {% block title %}Inventory Tracker{% endblock %}
+    {% block head %}
+    {% endblock %}
+      {% block content %}
+        <hr/>
+        <h2>Menu</h2>
+
+        {% for menu_item in object_list %}
+            <table class="inventory-table">
+            <thead>
+                <tr>
+                    <th>Menu Item</th>
+                    <th>Price</th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+             <tr>
+                 <td>
+                     <a href="{% url "update_menu_item" menu_item.id %}">{{ menu_item.title }}</a>
+                 </td>
+                 <td>
+                     ${{ menu_item.price|stringformat:".2f" }}
+                 </td>
+                 <td><a href="{% url "delete_menu_item" menu_item.id %}"
+                           style="text-decoration: none; color: inherit;">❌</a></td>
+             </tr>
+              {% for recipe_requirement in menu_item.reciperequirement_set.all %}
+                    <tr>
+                        <td>{{ recipe_requirement.quantity }}
+                        {{recipe_requirement.ingredient.unit }}
+                        {{recipe_requirement.ingredient.name }}</td>
+                    </tr>
+             {% endfor %}
+             <tr>
+
+             </tr>
+        </table>
+        {% endfor %}
+        <center>
+            <a href="{% url "add_menu_item" %}" style="display:
+         inherit; text-align: center; border-radius: 15px; text-decoration: none;
+         color: inherit; padding: 4px; background-color: lightblue;">➕</a>
+        </center>
+
+
+    {% endblock %}
+    <footer>
+
+    </body>
+    </footer>
 </html>

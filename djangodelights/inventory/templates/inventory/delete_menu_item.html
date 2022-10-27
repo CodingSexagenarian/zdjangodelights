@@ -1,9 +1,10 @@
-{% extends 'base.html' %} 
-{% load static %} 
+{% extends 'base.html' %}
+{% load static %}
 {% block content %}
     <h2>Delete Menu Item</h2>
         <form method="post">
-          <p>Confirm that you want to delete "{{ object }}"?</p>
-          <input type="submit" value="Confirm" />
+            {% csrf_token %}
+            <p>Are you sure you want to delete "{{ object }}"?</p>
+            <input type="submit" value="Confirm" />
         </form>
 {% endblock %}

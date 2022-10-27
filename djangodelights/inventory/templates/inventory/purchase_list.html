@@ -1,10 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+        <!--This is the meta information which is good for SEO-->
+    {% block head-meta %}
+        <meta charset="UTF-8">
+        <meta name="keywords" content="Inventory Tracker Manages Your
+        Kitchen's Inventory Needs">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+       <title>Purchase List</title>
+    {% endblock %}
 </head>
 <body>
-
+{% block content %}
+    <h2>Purchases</h2>
+    <a href="{% url 'add_purchase' %}">Record New Purchase</a>
+    <hr/>
+    <table class="inventory-table">
+        <thead>
+            <tr>
+                <th>Menu Item</th>
+                <th>Price</th>
+                <th>Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for purchase in object_list %}
+            <tr>
+                <td>{{ purchase.menu_item.title }}</td>
+                <td class="price">${{ purchase.menu_item.price|stringformat:".2f" }}</td>
+                <td>{{ purchase.timestamp }}</td>
+                <td><a href="{% url "delete_purchase" purchase.id %}"
+                       style="text-decoration: none; color: inherit;">❌</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
 </body>
 </html>
+

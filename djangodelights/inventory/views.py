@@ -40,9 +40,10 @@ class UpdateIngredientView(UpdateView):
 
 
 class DeleteIngredientView(DeleteView):
-    template_name = "inventory/delete.html"
+    template_name = "inventory/delete_ingredient.html"
     model = Ingredient
-    form_class = IngredientForm
+    success_url = "/ingredients"
+
 
 
 class MenuView(ListView):
@@ -63,9 +64,9 @@ class UpdateMenuItemView(UpdateView):
 
 
 class DeleteMenuItemView(DeleteView):
-    template_name = "inventory/delete.html"
+    template_name = "inventory/delete_menu_item.html"
     model = MenuItem
-    form_class = MenuItemForm
+    success_url = "menu/"
 
 
 class NewRecipeRequirementView(CreateView):
@@ -114,11 +115,13 @@ class NewPurchaseView(TemplateView):
         return redirect("/purchases")
 
 
-class UpdatePurchasesView(UpdateView):
+class UpdatePurchaseView(UpdateView):
     template_name = "inventory/update_purchase.html"
     model = Purchase
+    form_class = PurchaseForm
 
 
-class DeletePurchasesView(DeleteView):
-    template_name = "inventory/delete.html"
+class DeletePurchaseView(DeleteView):
+    template_name = "inventory/delete_purchase.html"
     model = Purchase
+    success_url = "purchases/"

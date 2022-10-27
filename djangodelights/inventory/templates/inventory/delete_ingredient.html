@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <h2>Delete Line</h2>
+    <h2>Delete Ingredient</h2>
         <form method="post">
-          <p>Are you sure you want to delete "{{ object }}"?</p>
-          <input type="submit" value="Confirm" />
+            {% csrf_token %}
+            <p>Are you sure you want to delete "{{ object }}"?</p>
+            <input type="submit" value="Confirm" />
         </form>
 {% endblock %}
