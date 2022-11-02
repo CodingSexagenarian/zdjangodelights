@@ -1,15 +1,28 @@
 {% extends 'base.html' %}
 {% load static %}
-
-<html>
-    <body>
-    {% block title %}Inventory Tracker{% endblock %}
-    {% block head %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--This is the meta information which is good for SEO-->
+    {% block head-meta %}
+        <meta charset="UTF-8">
+        <meta name="keywords" content="Inventory Tracker Manages Your
+        Kitchen's Inventory Needs">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+       <title>Purchase List</title>
     {% endblock %}
+</head>
+<body>
+    {% block title %}Inventory Tracker{% endblock %}
       {% block content %}
-        <hr/>
         <h2>Menu</h2>
-
+        <hr/>
+            <center>
+                <a href="{% url "add_menu_item" %}" style="display:
+         inherit; text-align: center; border-radius: 15px; text-decoration: none;
+         color: inherit; padding: 4px; background-color: lightblue;">➕</a>
+            </center>
         {% for menu_item in object_list %}
             <table class="inventory-table">
             <thead>
@@ -20,40 +33,28 @@
 
                 </tr>
             </thead>
-
             <tbody>
+                <tr>
+                    <td>
+                        <a href="{% url "update_menu_item" menu_item.id %}">{{ menu_item.title }}</a>
+                    </td>
+                    <td>
+                        ${{ menu_item.price|stringformat:".2f" }}
+                    </td>
+                    <td><a href="{% url "delete_menu_item" menu_item.id %}"
+                              style="text-decoration: none; color: inherit;">❌</a></td>
+                </tr>
+                 {% for recipe_requirement in menu_item.reciperequirement_set.all %}
+                     <tr>
+                          <td>{{ recipe_requirement.quantity }}
+                          {{recipe_requirement.ingredient.unit }}
+                          {{recipe_requirement.ingredient.name }}</td>
+                     </tr>
+                {% endfor %}
              <tr>
-                 <td>
-                     <a href="{% url "update_menu_item" menu_item.id %}">{{ menu_item.title }}</a>
-                 </td>
-                 <td>
-                     ${{ menu_item.price|stringformat:".2f" }}
-                 </td>
-                 <td><a href="{% url "delete_menu_item" menu_item.id %}"
-                           style="text-decoration: none; color: inherit;">❌</a></td>
-             </tr>
-              {% for recipe_requirement in menu_item.reciperequirement_set.all %}
-                    <tr>
-                        <td>{{ recipe_requirement.quantity }}
-                        {{recipe_requirement.ingredient.unit }}
-                        {{recipe_requirement.ingredient.name }}</td>
-                    </tr>
-             {% endfor %}
-             <tr>
-
              </tr>
         </table>
         {% endfor %}
-        <center>
-            <a href="{% url "add_menu_item" %}" style="display:
-         inherit; text-align: center; border-radius: 15px; text-decoration: none;
-         color: inherit; padding: 4px; background-color: lightblue;">➕</a>
-        </center>
-
-
     {% endblock %}
-    <footer>
-
-    </body>
-    </footer>
+</body>
 </html>

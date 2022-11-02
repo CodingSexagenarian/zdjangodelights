@@ -16,12 +16,6 @@
 <body>
 {% block content %}
     <h2>Purchases</h2>
-    <hr/>
-    <center>
-        <a href="{% url "add_purchase" %}" style="display:
-     inherit; text-align: center; border-radius: 15px; text-decoration: none;
-     color: inherit; padding: 4px; background-color: lightblue;">➕</a>
-    </center>
     <table class="inventory-table">
         <thead>
             <tr>
@@ -31,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for purchase in object_list %}
+        {% for purchase in purchases %}
             <tr>
                 <td>{{ purchase.menu_item.title }}</td>
                 <td class="price">${{ purchase.menu_item.price|stringformat:".2f" }}</td>
@@ -40,6 +34,11 @@
         {% endfor %}
         </tbody>
     </table>
+    <hr/>
+    <h2>Totals</h2>
+    <section style="color: green;">Total Revenue: ${{ revenue|stringformat:".2f" }}</section>
+    <section style="color: red;">Total Cost: ${{ total_cost|stringformat:".2f" }}</section>
+    <section style="color: blue;">Total Profit: ${{ profit|stringformat:".2f" }}</section>
 {% endblock %}
 </body>
 </html>
