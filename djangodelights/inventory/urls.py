@@ -23,9 +23,5 @@ urlpatterns = [
          name="add_recipe_requirement"),
     path('purchases/', views.PurchasesView.as_view(), name="purchases"),
     path('purchases/new', views.NewPurchaseView.as_view(), name="add_purchase"),
-    path('purchases/<slug:pk>/update', views.UpdatePurchaseView.as_view(),
-         name="update_purchase"),
-    path('purchases/<slug:pk>/delete', views.DeletePurchaseView.as_view(),
-         name="delete_purchase"),
     path('reports', views.ReportView.as_view(), name="reports")
 ]

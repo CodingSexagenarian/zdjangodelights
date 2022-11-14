@@ -36,7 +36,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <a href="{% url "update_menu_item" menu_item.id %}">{{ menu_item.title }}</a>
+                        <a href="{% url "update_menu_item" menu_item.id %}">{{ menu_item.name }}</a>
                     </td>
                     <td>
                         ${{ menu_item.price|stringformat:".2f" }}

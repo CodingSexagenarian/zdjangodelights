@@ -33,7 +33,7 @@
         <tbody>
         {% for purchase in object_list %}
             <tr>
-                <td>{{ purchase.menu_item.title }}</td>
+                <td>{{ purchase.menu_item.name }}</td>
                 <td class="price">${{ purchase.menu_item.price|stringformat:".2f" }}</td>
                 <td>{{ purchase.timestamp }}</td>
             </tr>

@@ -1,17 +1,19 @@
-from django.shortcuts import render
-from .models import Ingredient, MenuItem, RecipeRequirement, Purchase
+from django.shortcuts import redirect
+
+from django.db.models import Sum, F
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
-from django.core.exceptions import SuspiciousOperation
-
-# Import the generic views below:
 from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.core.exceptions import SuspiciousOperation
 
-# Create your views here.
+from .models import Ingredient, MenuItem, Purchase, RecipeRequirement
+from .forms import IngredientForm, MenuItemForm, RecipeRequirementForm
+
+from heapq import nlargest
 
 
-class HomeView(TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "inventory/home.html"
 
     def get_context_data(self, **kwargs):
@@ -22,78 +24,66 @@ class HomeView(TemplateView):
         return context
 
 
-class IngredientsView(ListView):
+class IngredientsView(LoginRequiredMixin, ListView):
     template_name = "inventory/ingredients_list.html"
     model = Ingredient
 
 
-class NewIngredientView(CreateView):
+class NewIngredientView(LoginRequiredMixin, CreateView):
     template_name = "inventory/add_ingredient.html"
     model = Ingredient
     form_class = IngredientForm
 
 
-class UpdateIngredientView(UpdateView):
+class UpdateIngredientView(LoginRequiredMixin, UpdateView):
     template_name = "inventory/update_ingredient.html"
     model = Ingredient
     form_class = IngredientForm
 
 
-class DeleteIngredientView(DeleteView):
+class DeleteIngredientView(LoginRequiredMixin, DeleteView):
     template_name = "inventory/delete_ingredient.html"
     model = Ingredient
     success_url = "/ingredients"
 
 
-
-class MenuView(ListView):
+class MenuView(LoginRequiredMixin, ListView):
     template_name = "inventory/menu_list.html"
     model = MenuItem
 
 
-class NewMenuItemView(CreateView):
+class NewMenuItemView(LoginRequiredMixin, CreateView):
     template_name = "inventory/add_menu_item.html"
     model = MenuItem
     form_class = MenuItemForm
 
 
-class UpdateMenuItemView(UpdateView):
+class UpdateMenuItemView(LoginRequiredMixin, UpdateView):
     template_name = "inventory/update_menu_item.html"
     model = MenuItem
     form_class = MenuItemForm
 
 
-class DeleteMenuItemView(DeleteView):
+class DeleteMenuItemView(LoginRequiredMixin, DeleteView):
     template_name = "inventory/delete_menu_item.html"
     model = MenuItem
-    success_url = "menu/"
+    success_url = "/menu"
 
 
-class NewRecipeRequirementView(CreateView):
+class NewRecipeRequirementView(LoginRequiredMixin, CreateView):
     template_name = "inventory/add_recipe_requirement.html"
     model = RecipeRequirement
     form_class = RecipeRequirementForm
 
 
-class UpdateRecipeRequirementView(UpdateView):
-    template_name = "inventory/update_recipe_requirement.html"
-    model = RecipeRequirement
-    form_class = RecipeRequirementForm
-
-
-class DeleteRecipeRequirementView(DeleteView):
-    template_name = "inventory/delete.html"
-    model = RecipeRequirement
-    form_class = RecipeRequirementForm
-
-
-class PurchasesView(ListView):
+class PurchasesView(LoginRequiredMixin, ListView):
     template_name = "inventory/purchase_list.html"
     model = Purchase
 
 
-class NewPurchaseView(TemplateView):
+class NewPurchaseView(LoginRequiredMixin, TemplateView):
     template_name = "inventory/add_purchase.html"
+    model = Purchase
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -115,13 +105,34 @@ class NewPurchaseView(TemplateView):
         return redirect("/purchases")
 
 
-class UpdatePurchaseView(UpdateView):
-    template_name = "inventory/update_purchase.html"
-    model = Purchase
-    form_class = PurchaseForm
+class ReportView(LoginRequiredMixin, TemplateView):
+    template_name = "inventory/reports.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["purchases"] = Purchase.objects.all()
+        revenue = Purchase.objects.aggregate(
+            revenue=Sum("menu_item__price"))["revenue"]
+        total_cost = 0
+        for purchase in Purchase.objects.all():
+            for recipe_requirement in purchase.menu_item.reciperequirement_set.all():
+                total_cost += recipe_requirement.ingredient.unit_price * \
+                    recipe_requirement.quantity
+
+        context["revenue"] = revenue
+        context["total_cost"] = total_cost
+        context["profit"] = revenue - total_cost
+        context["gross_profit"] = (revenue - total_cost) / total_cost * 100
+        context["gross_margin_ratio"] = (revenue - total_cost) / revenue * 100
+        context["list_of_purchases"] = Purchase.objects.values_list('menu_item', flat=True).distinct()
+
+        return context
+
+    def get_top_3(self, **kwargs):
+        top_3 = nlargest(3, list_of_purchases)
+        return top_3
 
 
-class DeletePurchaseView(DeleteView):
-    template_name = "inventory/delete_purchase.html"
-    model = Purchase
-    success_url = "purchases/"
+def log_out(request):
+    logout(request)
+    return redirect("/")

@@ -19,8 +19,8 @@ its inventory.
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Name")
-    quantity = models.FloatField(verbose_name="Quantity")
+    name = models.CharField(max_length=200, verbose_name="Name", unique=True)
+    quantity = models.FloatField(default=0.0, verbose_name="Quantity")
     unit = models.CharField(max_length=10, choices=UNIT_CHOICES, default="",
                             verbose_name="Unit of Measure")
     unit_price = models.FloatField(default=0.0, verbose_name="Unit Price")
@@ -29,7 +29,7 @@ class Ingredient(models.Model):
         return f"{self.name}: {self.unit_price} {self.unit}"
 
     def get_absolute_url(self):
-        return "/ingredient/list"
+        return "/ingredients"
 
     class Meta:
         ordering = ["name"]
@@ -40,13 +40,13 @@ This model represents an item on the restaurant’s menu.
 
 
 class MenuItem(models.Model):
-    title = models.CharField(max_length=100, unique=True,
+    name = models.CharField(max_length=200, unique=True,
                              verbose_name="Item Name")
     price = models.FloatField(default=0.00, verbose_name="Price")
-    description = models.CharField(max_length=500,
+    description = models.CharField(max_length=500, default="",
                                    verbose_name="Item Description")
     def __str__(self):
-        return f"title={self.title}; price={self.price}"
+        return f"name={self.name}; price={self.price}"
 
     def get_absolute_url(self):
         return "/menu"
@@ -55,7 +55,7 @@ class MenuItem(models.Model):
         return all(X.enough() for X in self.reciperequirement_set.all())
 
     class Meta:
-        ordering = ["title"]
+        ordering = ["name"]
 
 """
 This model represents a single ingredient and how much of it is required 
@@ -95,4 +95,4 @@ class Purchase(models.Model):
         return "/purchases"
 
     class Meta:
-        ordering = ["menu_item"]
+        ordering = ["timestamp"]

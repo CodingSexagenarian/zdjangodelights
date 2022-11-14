@@ -1,5 +1,19 @@
 {% extends 'base.html' %}
-{% load static %} 
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--This is the meta information which is good for SEO-->
+    {% block head-meta %}
+        <meta charset="UTF-8">
+        <meta name="keywords" content="Inventory Tracker Manages Your
+        Kitchen's Inventory Needs">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+       <title>Purchase List</title>
+    {% endblock %}
+</head>
+<body>
 {% block content %}
     <h2>Update Menu Item</h2>
     <form method="post" class="flex-form">
@@ -8,3 +22,5 @@
         <input type="submit" value="Update"/>
     </form>
 {% endblock %}
+</body>
+</html>

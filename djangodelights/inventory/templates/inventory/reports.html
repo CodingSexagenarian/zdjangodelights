@@ -27,7 +27,7 @@
         <tbody>
         {% for purchase in purchases %}
             <tr>
-                <td>{{ purchase.menu_item.title }}</td>
+                <td>{{ purchase.menu_item.name }}</td>
                 <td class="price">${{ purchase.menu_item.price|stringformat:".2f" }}</td>
                 <td>{{ purchase.timestamp }}</td>
             </tr>
@@ -36,9 +36,20 @@
     </table>
     <hr/>
     <h2>Totals</h2>
-    <section style="color: green;">Total Revenue: ${{ revenue|stringformat:".2f" }}</section>
-    <section style="color: red;">Total Cost: ${{ total_cost|stringformat:".2f" }}</section>
-    <section style="color: blue;">Total Profit: ${{ profit|stringformat:".2f" }}</section>
+    <section style="color: blue;">Gross Revenue: ${{ revenue|stringformat:".2f" }}</section>
+    <section
+            style="color: red;">Cost of Goods Sold: ${{ total_cost|stringformat:".2f" }}
+    </section>
+    <section
+            style="color: green;">Gross Profit: ${{ profit|stringformat:".2f" }}
+    </section>
+    <h2>Ratios</h2>
+    <section
+            style="color: black;">Gross Profit Margin: {{ gross_profit|stringformat:".2f" }}%
+    </section>
+    <section
+            style="color: black;">Gross Margin Ratio: {{ gross_margin_ratio|stringformat:".2f" }}%
+    </section>
 {% endblock %}
 </body>
 </html>
